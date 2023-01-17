@@ -22,4 +22,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: "latest",
   },
+  rules: {
+    "prettier/prettier": ["off", { singleQuote: true }],
+  },
 };
