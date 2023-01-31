@@ -115,7 +115,7 @@
   </vee-form>
 </template>
 <script>
-import { auth, db } from "@/includes/firebase";
+import { auth, usersCollection } from "@/includes/firebase";
 export default {
   name: "RegisterForm",
   data() {
@@ -152,6 +152,21 @@ export default {
           values.email,
           values.password
         );
+      } catch (error) {
+        this.reg_in_submission = false;
+        this.reg_alert_variant = "bg-red-500";
+        this.reg_alert_msg =
+          "An unexpected error occured. Please try again later.";
+        return;
+      }
+
+      try {
+        usersCollection.add({
+          name: values.name,
+          email: values.email,
+          age: values.age,
+          country: values.country,
+        });
       } catch (error) {
         this.reg_in_submission = false;
         this.reg_alert_variant = "bg-red-500";
