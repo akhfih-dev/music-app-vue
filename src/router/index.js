@@ -5,16 +5,27 @@ import Manage from "@/views/ManageView.vue";
 
 const routes = [
   {
+    name: "home",
     path: "/",
     component: Home,
   },
   {
+    name: "about",
     path: "/about",
     component: About,
   },
   {
+    name: "manage",
     path: "/manage",
     component: Manage,
+  },
+  {
+    path: "/manage",
+    redirect: { name: "manage" },
+  },
+  {
+    path: "/:catchAll(.*)*",
+    redirect: { name: "home" },
   },
 ];
 
