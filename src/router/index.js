@@ -19,6 +19,9 @@ const routes = [
     // alias: "/manage",
     path: "/manage-music",
     component: Manage,
+    // beforeEnter: (to, from, next) => {
+    //   next();
+    // },
   },
   {
     path: "/manage",
@@ -36,8 +39,8 @@ const router = createRouter({
   linkExactActiveClass: "text-yellow-500",
 });
 
-router.beforeEach((to, from, next) => {
-  next();
-});
+// router.beforeEach((to, from, next) => {
+//   next();
+// });
 
 export default router;
