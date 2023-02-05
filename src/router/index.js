@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/HomeView.vue";
 import About from "@/views/AboutView.vue";
 import Manage from "@/views/ManageView.vue";
+import useUserStore from "@/stores/user";
 
 const routes = [
   {
@@ -22,6 +23,9 @@ const routes = [
     // beforeEnter: (to, from, next) => {
     //   next();
     // },
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/manage",
@@ -39,8 +43,21 @@ const router = createRouter({
   linkExactActiveClass: "text-yellow-500",
 });
 
-// router.beforeEach((to, from, next) => {
-//   next();
-// });
+router.beforeEach((to, from, next) => {
+  if (!to.meta.requireAuth) {
+    next();
+    return;
+  }
+
+  const store = useUserStore();
+
+  if (store.userLoggedIn) {
+    next();
+  } else {
+    next({ name: "home" });
+  }
+
+  next();
+});
 
 export default router;
