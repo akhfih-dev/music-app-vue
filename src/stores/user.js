@@ -20,7 +20,7 @@ export default defineStore("user", {
       });
 
       await userCred.user.updateProfile({
-        display: values.name,
+        displayName: values.name,
       });
 
       this.userLoggedIn = true;
