@@ -115,10 +115,10 @@ export default {
       });
     },
   },
-  // beforeMount() {
-  //   this.uploads.forEach((upload) => {
-  //     upload.task.cancel();
-  //   });
-  // },
+  beforeMount() {
+    this.uploads.forEach((upload) => {
+      upload.task.cancel();
+    });
+  },
 };
 </script>
