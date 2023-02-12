@@ -44,7 +44,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (!to.meta.requireAuth) {
+  if (!to.meta.requiresAuth) {
     next();
     return;
   }
@@ -56,8 +56,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next({ name: "home" });
   }
-
-  next();
 });
 
 export default router;
