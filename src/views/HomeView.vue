@@ -55,15 +55,33 @@ export default {
       songs: [],
     };
   },
-  async created() {
-    const snapshots = await songsCollection.get();
+  created() {
+    this.getSongs();
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  methods: {
+    handleScroll() {
+      const { scrollTop, offsetHeight } = document.documentElement;
+      const { innerHeight } = window;
+      const bottomOfWindow =
+        Math.round(scrollTop) + innerHeight === offsetHeight;
+      if (bottomOfWindow) {
+        console.log("Bottom of window");
+      }
+    }, //responsible for checking the current scroll position of the page.
+    async getSongs() {
+      const snapshots = await songsCollection.get();
 
-    snapshots.forEach((document) => {
-      this.songs.push({
-        docID: document.id,
-        ...document.data(),
+      snapshots.forEach((document) => {
+        this.songs.push({
+          docID: document.id,
+          ...document.data(),
+        });
       });
-    });
+    },
   },
 };
 </script>
