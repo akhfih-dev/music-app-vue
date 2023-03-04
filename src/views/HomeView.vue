@@ -26,7 +26,7 @@
   </section>
 
   <!-- Main Content -->
-  <section class="container mx-auto">
+  <section class="container mx-auto pb-24">
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <span class="card-title">Songs</span>
@@ -53,6 +53,8 @@ export default {
   data() {
     return {
       songs: [],
+      maxPerPage: 3,
+      pendingRequest: false,
     };
   },
   created() {
@@ -69,11 +71,31 @@ export default {
       const bottomOfWindow =
         Math.round(scrollTop) + innerHeight === offsetHeight;
       if (bottomOfWindow) {
-        console.log("Bottom of window");
+        this.getSongs();
       }
     }, //responsible for checking the current scroll position of the page.
     async getSongs() {
-      const snapshots = await songsCollection.get();
+      if (this.pendingRequest) {
+        return;
+      }
+
+      this.pendingRequest = true;
+      let snapshots;
+      if (this.songs.length) {
+        const lastDoc = await songsCollection
+          .doc(this.songs[this.songs.length - 1].docID)
+          .get();
+        snapshots = await songsCollection
+          .orderBy("modified_name")
+          .startAfter(lastDoc)
+          .limit(this.maxPerPage)
+          .get();
+      } else {
+        snapshots = await songsCollection
+          .orderBy("modified_name")
+          .limit(this.maxPerPage)
+          .get();
+      }
 
       snapshots.forEach((document) => {
         this.songs.push({
@@ -81,6 +103,8 @@ export default {
           ...document.data(),
         });
       });
+
+      this.pendingRequest = false;
     },
   },
 };
